@@ -149,6 +149,7 @@
             navigator.clipboard.writeText(text).then(() => {
                 const msg = item.querySelector('.copied-msg');
                 msg.style.display = 'inline';
+                msg.style.opacity = '0.5';
                 setTimeout(() => {
                     msg.style.display = 'none';
                 }, 1500);
