@@ -30,6 +30,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+            position: relative;
         }
         .file-name {
             flex-grow: 1;
@@ -47,15 +48,31 @@
             cursor: pointer;
             background-color: #007acc;
             color: white;
+            transition: background-color 0.2s, transform 0.1s;
         }
         .actions button:hover {
             background-color: #005fa3;
+        }
+        .actions button:active {
+            transform: scale(0.95);
+            background-color: #004f8a;
         }
         .actions .copy {
             background-color: #aaa;
         }
         .actions .copy:hover {
             background-color: #888;
+        }
+        .copied-msg {
+            position: absolute;
+            top: -20px;
+            right: 10px;
+            background: #4caf50;
+            color: white;
+            padding: 2px 6px;
+            font-size: 0.8em;
+            border-radius: 4px;
+            display: none;
         }
     </style>
 </head>
@@ -78,47 +95,64 @@
             const li = document.createElement('li');
             li.className = 'file-item';
 
-            const nameDiv = document.createElement('div');
-            nameDiv.className = 'file-name';
-            nameDiv.textContent = filename;
-
-            const actionsDiv = document.createElement('div');
-            actionsDiv.className = 'actions';
-
-            const openLink = document.createElement('a');
-            openLink.href = filename;
-            openLink.target = "_blank";
-            const openButton = document.createElement('button');
-            openButton.textContent = 'Open';
-            openLink.appendChild(openButton);
-
-            const downloadLink = document.createElement('a');
-            downloadLink.href = filename;
-            downloadLink.download = '';
-            const downloadButton = document.createElement('button');
-            downloadButton.textContent = 'Download';
-            downloadLink.appendChild(downloadButton);
-
-            const copyButton = document.createElement('button');
-            copyButton.className = 'copy';
-            copyButton.textContent = 'Copy';
-            copyButton.onclick = () => copyText(filename);
-
-            actionsDiv.appendChild(openLink);
-            actionsDiv.appendChild(downloadLink);
-            actionsDiv.appendChild(copyButton);
-
-            li.appendChild(nameDiv);
-            li.appendChild(actionsDiv);
+            li.appendChild(createFileName(filename));
+            li.appendChild(createActions(filename));
+            li.appendChild(createCopiedMsg());
 
             fileList.appendChild(li);
         });
 
-        function copyText(text) {
+        function createFileName(filename) {
+            const div = document.createElement('div');
+            div.className = 'file-name';
+            div.textContent = filename;
+            return div;
+        }
+
+        function createActions(filename) {
+            const div = document.createElement('div');
+            div.className = 'actions';
+
+            div.appendChild(createOpenButton(filename));
+            div.appendChild(createCopyButton(filename));
+            return div;
+        }
+
+        function createOpenButton(filename) {
+            const link = document.createElement('a');
+            link.href = filename;
+            link.target = "_blank";
+
+            const button = document.createElement('button');
+            button.textContent = 'Open';
+
+            link.appendChild(button);
+            return link;
+        }
+
+        function createCopyButton(filename) {
+            const button = document.createElement('button');
+            button.className = 'copy';
+            button.textContent = 'Copy';
+            button.onclick = (e) => showCopied(e.target.closest('.file-item'), filename);
+            return button;
+        }
+
+        function createCopiedMsg() {
+            const div = document.createElement('div');
+            div.className = 'copied-msg';
+            div.textContent = 'Copied!';
+            return div;
+        }
+
+        function showCopied(item, text) {
             navigator.clipboard.writeText(text).then(() => {
-                alert('Copied: ' + text);
+                const msg = item.querySelector('.copied-msg');
+                msg.style.display = 'inline';
+                setTimeout(() => {
+                    msg.style.display = 'none';
+                }, 1500);
             }).catch(err => {
-                alert('Failed to copy!');
                 console.error('Copy failed', err);
             });
         }
