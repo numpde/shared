@@ -134,7 +134,7 @@
             const button = document.createElement('button');
             button.className = 'copy';
             button.textContent = 'Copy';
-            button.onclick = (e) => showCopied(e.target.closest('.file-item'), filename);
+            button.onclick = (e) => showCopied(e.target.closest('.file-item'), stripExtension(filename));
             return button;
         }
 
@@ -155,6 +155,10 @@
             }).catch(err => {
                 console.error('Copy failed', err);
             });
+        }
+
+        function stripExtension(filename) {
+            return filename.replace(/\.pdf$/i, '');
         }
     </script>
 </body>
