@@ -9,41 +9,119 @@
             margin: 2em;
             background-color: #f9f9f9;
             color: #333;
+            user-select: none;
         }
         h1 {
             text-align: center;
             color: #222;
         }
-        ul {
+        .file-list {
             list-style: none;
             padding: 0;
-            max-width: 600px;
+            max-width: 800px;
             margin: 2em auto;
         }
-        li {
+        .file-item {
             background: #fff;
             margin: 0.5em 0;
             padding: 1em;
             border-radius: 8px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
-        a {
-            text-decoration: none;
-            color: #007acc;
+        .file-name {
+            flex-grow: 1;
+            margin-right: 1em;
+            overflow-wrap: anywhere;
             font-weight: bold;
-            word-break: break-all;
+            color: #555;
         }
-        a:hover {
-            text-decoration: underline;
+        .actions button {
+            margin-left: 0.5em;
+            padding: 0.4em 0.8em;
+            font-size: 0.9em;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #007acc;
+            color: white;
+        }
+        .actions button:hover {
+            background-color: #005fa3;
+        }
+        .actions .copy {
+            background-color: #aaa;
+        }
+        .actions .copy:hover {
+            background-color: #888;
         }
     </style>
 </head>
 <body>
     <h1>Available PDFs</h1>
-    <ul>
-        <li><a href="CC(Br)c1ccc2ccc(O[C@@H]3CC[C@H](C)CC3)c(C(F)(F)F)c2c1.pdf">CC(Br)c1ccc2ccc(O[C@@H]3CC[C@H](C)CC3)c(C(F)(F)F)c2c1.pdf</a></li>
-        <li><a href="CCOC(=O)CN(C(=O)CNC(=O)Nc1cccc(C)c1)c1ccccc1.pdf">CCOC(=O)CN(C(=O)CNC(=O)Nc1cccc(C)c1)c1ccccc1.pdf</a></li>
-        <li><a href="COC(=O)C1(c2ccc(O)c(C(C)=NO)c2)CC1.pdf">COC(=O)C1(c2ccc(O)c(C(C)=NO)c2)CC1.pdf</a></li>
+    <ul class="file-list" id="fileList">
+        <!-- Items will be inserted here dynamically -->
     </ul>
+
+    <script>
+        const files = [
+            "CC(Br)c1ccc2ccc(O[C@@H]3CC[C@H](C)CC3)c(C(F)(F)F)c2c1.pdf",
+            "CCOC(=O)CN(C(=O)CNC(=O)Nc1cccc(C)c1)c1ccccc1.pdf",
+            "COC(=O)C1(c2ccc(O)c(C(C)=NO)c2)CC1.pdf"
+        ];
+
+        const fileList = document.getElementById('fileList');
+
+        files.forEach(filename => {
+            const li = document.createElement('li');
+            li.className = 'file-item';
+
+            const nameDiv = document.createElement('div');
+            nameDiv.className = 'file-name';
+            nameDiv.textContent = filename;
+
+            const actionsDiv = document.createElement('div');
+            actionsDiv.className = 'actions';
+
+            const openLink = document.createElement('a');
+            openLink.href = filename;
+            openLink.target = "_blank";
+            const openButton = document.createElement('button');
+            openButton.textContent = 'Open';
+            openLink.appendChild(openButton);
+
+            const downloadLink = document.createElement('a');
+            downloadLink.href = filename;
+            downloadLink.download = '';
+            const downloadButton = document.createElement('button');
+            downloadButton.textContent = 'Download';
+            downloadLink.appendChild(downloadButton);
+
+            const copyButton = document.createElement('button');
+            copyButton.className = 'copy';
+            copyButton.textContent = 'Copy';
+            copyButton.onclick = () => copyText(filename);
+
+            actionsDiv.appendChild(openLink);
+            actionsDiv.appendChild(downloadLink);
+            actionsDiv.appendChild(copyButton);
+
+            li.appendChild(nameDiv);
+            li.appendChild(actionsDiv);
+
+            fileList.appendChild(li);
+        });
+
+        function copyText(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Copied: ' + text);
+            }).catch(err => {
+                alert('Failed to copy!');
+                console.error('Copy failed', err);
+            });
+        }
+    </script>
 </body>
 </html>
