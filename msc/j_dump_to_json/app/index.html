@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>SMILES Predictions Viewer</title>
+  <link rel="stylesheet" href="src/styles.css"/>
+  <link rel="icon" href="favicon.ico" type="image/x-icon"/>
+</head>
+<body>
+  <div id="root"></div>
+
+  <!-- React & ReactDOM (UMD) -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+  <!-- Babel -->
+  <script crossorigin src="https://cdn.jsdelivr.net/npm/@babel/standalone@7/babel.min.js"></script>
+
+  <!-- App modules (order matters) -->
+  <script type="text/babel" data-presets="react" src="src/utils/normalize.js"></script>
+
+  <script type="text/babel" data-presets="react" src="src/components/FileSelect.js"></script>
+  <script type="text/babel" data-presets="react" src="src/components/SmilesViewer.js"></script>
+
+  <script type="text/babel" data-presets="react" src="src/App.js"></script>
+  <script type="text/babel" data-presets="react" src="src/index.js"></script>
+</body>
+</html>
