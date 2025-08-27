@@ -1,14 +1,204 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>NMR spectroscopy with language transformers</title>
+  <meta charset="UTF-8" />
+  <title>NMR spectroscopy with language transformers</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    /* --- Tokens --- */
+    :root{
+      --bg: #0b0d12;
+      --panel:#111522;
+      --panel-2:#0e1320;
+      --text:#e8ebf2;
+      --muted:#9aa4b7;
+      --ring:#b4c5ff;
+      --radius:14px;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --sans: ui-sans-serif, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", system-ui, sans-serif;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    }
+    @media (prefers-color-scheme: light){
+      :root{
+        --bg:#f6f8fc; --panel:#ffffff; --panel-2:#ffffff; --text:#0c1222; --muted:#5a647b;
+        --shadow: 0 8px 24px rgba(0,0,0,.08);
+      }
+    }
+
+    /* --- Base --- */
+    *{ box-sizing: border-box; }
+    html, body{ height:100%; }
+    body{
+      margin:0;
+      font-family: var(--sans);
+      color: var(--text);
+      background: var(--bg);
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.55;
+    }
+    a{ color: inherit; }
+
+    /* --- Layout --- */
+    .hero{
+      padding: 72px 20px 28px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255,255,255,.06);
+    }
+    .container{
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 0 20px 56px;
+    }
+
+    /* --- Heading --- */
+    h1{
+      margin: 0 0 12px;
+      font-size: clamp(30px, 5vw, 46px);
+      font-weight: 800;
+      letter-spacing: .2px;
+      line-height: 1.12;
+    }
+
+    /* Whitish with subtle rainbow hints */
+    .iridescent{
+      background: linear-gradient(
+        90deg,
+        rgba(255,255,255,0.97) 0%,
+        rgba(255,230,230,0.88) 12%,
+        rgba(255,255,230,0.92) 27%,
+        rgba(224,255,224,0.9) 42%,
+        rgba(220,240,255,0.92) 57%,
+        rgba(230,230,255,0.9) 72%,
+        rgba(245,230,255,0.92) 87%,
+        rgba(255,255,255,0.97) 100%
+      );
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+      filter: saturate(75%);
+    }
+    /* Optional: very subtle shimmer on hover/focus only (keeps static by default) */
+    @media (prefers-reduced-motion: no-preference){
+      .iridescent:hover, .iridescent:focus{
+        background-size: 200% 100%;
+        animation: shimmer 2.5s linear infinite;
+      }
+      @keyframes shimmer{
+        0% { background-position: 0% 50%; }
+        100% { background-position: 200% 50%; }
+      }
+    }
+
+    .subtitle{
+      margin:0;
+      color: var(--muted);
+      font-size: 14.5px;
+    }
+
+    /* --- Content cards --- */
+    main{ margin-top: 20px; }
+    .grid{
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 18px;
+      margin-top: 8px;
+    }
+    @media (min-width: 760px){
+      .grid{ grid-template-columns: 1fr 1fr; }
+    }
+    .card{
+      background: linear-gradient(180deg, var(--panel) 0%, var(--panel-2) 100%);
+      border: 1px solid rgba(255,255,255,.06);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 20px;
+    }
+    .card h2{
+      margin: 2px 0 10px;
+      font-size: 18px;
+    }
+    .meta{
+      font-family: var(--mono);
+      font-size: 12.5px;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+
+    /* --- Buttons --- */
+    .actions{ display:flex; gap:10px; flex-wrap: wrap; }
+    .btn{
+      --btn-bg: #1a2236;
+      display:inline-flex; align-items:center; gap:8px;
+      padding: 10px 14px;
+      border-radius: 12px;
+      text-decoration:none;
+      color: var(--text);
+      background: var(--btn-bg);
+      border: 1px solid rgba(255,255,255,.08);
+      transition: transform .06s ease, border-color .2s ease, box-shadow .2s ease, background .2s ease;
+      box-shadow: 0 2px 10px rgba(0,0,0,.25);
+    }
+    .btn:hover{ transform: translateY(-1px); border-color: rgba(180,197,255,.45); box-shadow: 0 6px 18px rgba(0,0,0,.28); }
+    .btn:focus{ outline: 3px solid var(--ring); outline-offset: 2px; }
+    .btn.secondary{ background: transparent; border-color: rgba(255,255,255,.12); }
+
+    /* --- Footer --- */
+    footer{
+      padding: 26px 20px 42px;
+      color: var(--muted);
+      font-size: 13px;
+      text-align:center;
+      border-top: 1px solid rgba(255,255,255,.06);
+    }
+
+    /* Reduce motion if requested */
+    @media (prefers-reduced-motion: reduce){
+      .btn{ transition: none; }
+      .iridescent{ animation: none !important; }
+    }
+  </style>
 </head>
 <body>
-<a href="RA-MSc-20250816.pdf">Report PDF (2025-08-16)</a>
 
-<p>
-This page will contain additional materials.
-</p>
+  <header class="hero">
+    <div class="container">
+      <h1>
+        NMR <span class="iridescent">spectroscopy</span> with language transformers
+      </h1>
+      <p class="subtitle">Additional materials for the project.</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="grid">
+      <article class="card">
+        <h2>Report</h2>
+        <div class="meta">PDF • 2025-08-16</div>
+        <div class="actions">
+          <a class="btn" href="RA-MSc-20250816.pdf">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zm1 7V3.5L20.5 9z"/></svg>
+            Open PDF
+          </a>
+        </div>
+      </article>
+
+      <article class="card">
+        <h2>Predictions table</h2>
+        <div class="meta">Interactive JSON dump browser</div>
+        <div class="actions">
+          <a class="btn secondary" href="j_dump_to_json/app" target="_blank" rel="noopener">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M14 3h7v7h-2V6.41l-9.29 9.3-1.42-1.42 9.3-9.29H14z"/><path d="M5 5h6v2H7v10h10v-4h2v6H5z"/></svg>
+            Open predictions app
+          </a>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <footer>
+    <div>© 2025 • R.A.</div>
+  </footer>
+
 </body>
 </html>
