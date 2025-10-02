@@ -166,11 +166,30 @@
         <h1>
             NMR <span class="iridescent">spectroscopy</span> with language transformers
         </h1>
-        <p class="subtitle">Additional materials for the project.</p>
+        <!--        <p class="subtitle">Additional materials for the project.</p>-->
     </div>
 </header>
 
 <main class="container">
+    <section class="card" style="grid-column: 1 / -1;">
+        <h2>Reading NMR notes with a language model</h2>
+        <p>
+            We test whether a compact transformer can read short NMR notes and return a small, credible shortlist of
+            molecules.
+        </p>
+        <p>
+            In NMR, we place a sample in a strong magnet and ping it with radio waves; the resulting spectra reveal how
+            atoms are connected.
+            Chemists condense these data into a few lines of text that we use as input.
+        </p>
+        <p>
+            Our model reads these notes,
+            proposes candidate molecules as SMILES structures,
+            ranks the candidates,
+            and estimates whether the correct answer appears among the top results.
+        </p>
+    </section>
+
     <section class="grid">
         <article class="card">
             <h2>Report</h2>
