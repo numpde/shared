@@ -3,9 +3,21 @@ function App() {
   const fileOptions = [
     {
       label:
-        "last.ckpt / data-cheese-split / subsample=200 / summaries.json",
+        "klcomp / data-cheese-split / subsample=200 / summaries.json",
       url:
         "../lambda__full_alberts_55_klcomp__20250621-0617_GPT2MultiHeadModel__checkpoints__last.ckpt/source=data-cheese-split__split=test__at_most=10000__downsize_to=10000__do_chemberta=True__do_func_grps=True/subsample=200/summaries.json",
+    },
+    {
+      label:
+        "shuffle / data-hu-etal-partial (SpectraBase) / subsample=200 / summaries.json",
+      url:
+        "../proart__full_alberts_55_klcomp_shuffle__20251108-2127_GPT2MultiHeadModel__checkpoints__epoch=03-loss=6.2835.ckpt/source=data-hu-etal-partial__split=test__at_most=1001__downsize_to=1001__do_chemberta=True__do_func_grps=True__DEFAULT_NUM_BEAMS=10__do_c_pk_frac=1.0__do_hsqc_frac=1.0/subsample=200/summaries.json",
+    },
+    {
+      label:
+        "shuffle / data-hu-etal-partial (mostly GDB-13) / subsample=200 / summaries.json",
+      url:
+        "../proart__full_alberts_55_klcomp_shuffle__20251108-2127_GPT2MultiHeadModel__checkpoints__epoch=03-loss=6.2835.ckpt/source=data-hu-etal-partial__split=test__at_most=929__downsize_to=929__do_chemberta=True__do_func_grps=True__do_c_pk_frac=1.0__do_hsqc_frac=1.0/subsample=200/summaries.json",
     },
     { label: "— Select a file —", url: "" },
     { label: "Custom URL…", url: "__custom__" },
