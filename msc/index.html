@@ -181,13 +181,18 @@
           .iridescent{ animation: none !important; }
         }
 
-/* Add breathing space before and after any grid section */
-.card + .grid {
-  margin-top: 24px; /* space before grids */
-}
-.grid + .card {
-  margin-top: 24px; /* space after grids */
-}
+        /* Add breathing space before and after any grid section */
+        .card + .grid {
+          margin-top: 24px; /* space before grids */
+        }
+        .grid + .card {
+          margin-top: 24px; /* space after grids */
+        }
+
+        /* Add extra space before the very first card */
+        main > .card:first-of-type {
+          margin-top: 32px;
+        }
 
 
     </style>
